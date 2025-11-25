@@ -62,11 +62,13 @@
   outset: 4pt,
   body,
 ) = {
-  box(width: 100%, stroke: stroke, outset: outset, fill: fill-clr)[
-    #v(5pt)
-    #align(center)[#text(size: 20pt, upper(strong(title)))]
-    #v(5pt)
-  ]
+  if title != none {
+    box(width: 100%, stroke: stroke, outset: outset, fill: fill-clr)[
+      #v(5pt)
+      #align(center)[#text(size: 20pt, upper(strong(title)))]
+      #v(5pt)
+    ]
+  }
   columns(2)[
     #body
   ]
@@ -81,32 +83,32 @@
 ) = (
   context {
     if (title != none and title != "") {
-      box(width: 100%, stroke: stroke, outset: outset, fill: fill-clr)[
-        #v(5pt)
-        #align(center)[#upper(strong(title))]
-        #v(5pt)
-      ]
-      linebreak()
-      v(-(small-text-size))
-      if (style-state.get() == 1) {
-        box(width: 1fr, stroke: stroke, outset: outset)[
-          #v(5pt)
-          #body
-          #v(5pt)
-        ]
-      } else {
-        body
-        v(-10pt)
-        ellipse(width: 30pt, height: 20pt, fill: rgb("000000"))[
-          #align(center + horizon)[#text(size: 8pt, fill: rgb("FFFFFF"), upper(strong("END")))]
-        ]
-      }
+      table(
+        stroke: none,
+        table.header(
+          box(width: 100%)[
+            #v(0.2em)
+            #set text(size: 12pt)
+            #align(center)[#upper(strong(title))]
+            #v(0.2em)
+          ]
+        ),
+        if (style-state.get() == 1) {
+          body
+        } else {
+          body
+          v(-10pt)
+          ellipse(width: 30pt, height: 20pt, fill: rgb("000000"))[
+            #align(center + horizon)[#text(size: 8pt, fill: rgb("FFFFFF"), upper(strong("END")))]
+          ]
+        }
+      )
     }
   }
 )
 
-#let step(a, b, bold: false) = {
-  if ((a != none and a != "") or (b != none and b != "")) {
+#let step(a, b, bold: false, capitalize: true) = {
+  let ret = if ((a != none and a != "") or (b != none and b != "")) {
     if bold {
       strong(a)
     } else {
@@ -121,6 +123,12 @@
       b
     }
     linebreak()
+  }
+
+  if (capitalize) {
+    upper(ret)
+  } else {
+    ret
   }
 }
 
