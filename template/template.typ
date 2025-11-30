@@ -122,7 +122,6 @@
     } else {
       b
     }
-    linebreak()
   }
 
   if (capitalize) {
